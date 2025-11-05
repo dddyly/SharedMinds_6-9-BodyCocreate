@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo</title>
+    <!-- <link rel="stylesheet" type="text/css" href="holistic.css" crossorigin="anonymous"> -->
+    <!-- <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils@0.6/control_utils.css" crossorigin="anonymous"> -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.3/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils@0.6/control_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils@0.3/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/holistic@0.5/holistic.js" crossorigin="anonymous"></script>
+    <script src="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.css" />
+   
+   <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+        }
+        .input_video {
+            display: none !important;
+        }
+        .canvas-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .output_canvas {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        /* Landing Page - Minimalistic Sign-In */
+        .landing-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            transition: opacity 0.5s ease-out;
+        }
+        .landing-page.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .landing-content {
+            text-align: center;
+        }
+        .landing-text {
+            color: #fff;
+            font-size: 24px;
+            font-weight: 300;
+            margin-bottom: 40px;
+            letter-spacing: 1px;
+        }
+        .landing-button {
+            padding: 15px 40px;
+            background: #fff;
+            border: 1px solid #fff;
+            color: #000;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 400;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+        .landing-button:hover {
+            background: #000;
+            color: #fff;
+        }
+        .landing-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Main App */
+        .app-container {
+            opacity: 0;
+            transition: opacity 0.5s ease-in;
+        }
+        .app-container.visible {
+            opacity: 1;
+        }
+
+        /* User Info (top right after login) */
+        .user-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-end;
+        }
+        .user-info {
+            color: #fff;
+            font-size: 14px;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .sign-out-button {
+            padding: 8px 16px;
+            background: transparent;
+            border: 1px solid #fff;
+            color: #fff;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        .sign-out-button:hover {
+            background: #fff;
+            color: #000;
+        }
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Landing Page -->
+    <div id="landingPage" class="landing-page">
+        <div class="landing-content">
+            <p class="landing-text">body-text co-create</p>
+            <button id="landingSignInBtn" class="landing-button">sign-in, start moving and creating</button>
+        </div>
+    </div>
+
+    <!-- Main App (hidden until logged in) -->
+    <div id="appContainer" class="app-container">
+        <!-- User info (top right after login) -->
+        <div class="user-container hidden" id="userContainer">
+            <div id="userInfo" class="user-info"></div>
+            <button id="signOutBtn" class="sign-out-button">Sign Out</button>
+        </div>
+
+        <div class="container">
+            <video class="input_video"></video>
+            <div class="canvas-container">
+                <canvas class="output_canvas" width="1280px" height="720px"></canvas>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script type="module" src="holistic.js"></script>
